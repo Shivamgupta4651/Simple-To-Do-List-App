@@ -1,3 +1,5 @@
+# Simple-To-Do-List-App
+
 Develop a simple to-do list app with features like adding tasks, marking them as
 completed, and removing completed tasks. This project focuses on basic data
 manipulation and user input handling.
@@ -29,7 +31,7 @@ manipulation and user input handling.
                 status = "Completed" if task['completed'] else "Not Completed"
                 print(f"{i}: {task['task']} - {status}")
 
-def main():
+    def main():
     todo_list = ToDoList()
 
     while True:
@@ -58,5 +60,5 @@ def main():
         else:
             print("Invalid choice. Please try again.")
 
-if __name__ == "__main__":
-    main()
+        if __name__ == "__main__":
+            main()
