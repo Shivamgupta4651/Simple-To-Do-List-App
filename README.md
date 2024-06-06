@@ -1,94 +1,62 @@
-# Simple-To-Do-List-App
-pip install tk
-import tkinter as tk
-from tkinter import messagebox
-class ToDoApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("To-Do List Application")
+Develop a simple to-do list app with features like adding tasks, marking them as
+completed, and removing completed tasks. This project focuses on basic data
+manipulation and user input handling.
 
+    class ToDoList:
+     def __init__(self):
         self.tasks = []
 
-        self.frame = tk.Frame(root)
-        self.frame.pack(pady=10)
+    def add_task(self, task):
+        self.tasks.append({'task': task, 'completed': False})
+        print(f"Added task: {task}")
 
-        self.task_listbox = tk.Listbox(
-            self.frame, 
-            height=10, 
-            width=50, 
-            selectmode=tk.SINGLE
-        )
-        self.task_listbox.pack(side=tk.LEFT, fill=tk.BOTH)
-
-        self.scrollbar = tk.Scrollbar(self.frame)
-        self.scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
-
-        self.task_listbox.config(yscrollcommand=self.scrollbar.set)
-        self.scrollbar.config(command=self.task_listbox.yview)
-
-        self.task_entry = tk.Entry(root, width=50)
-        self.task_entry.pack(pady=10)
-
-        self.add_button = tk.Button(
-            root, 
-            text="Add Task", 
-            width=48, 
-            command=self.add_task
-        )
-        self.add_button.pack(pady=10)
-
-        self.remove_button = tk.Button(
-            root, 
-            text="Remove Task", 
-            width=48, 
-            command=self.remove_task
-        )
-        self.remove_button.pack(pady=10)
-
-        self.mark_button = tk.Button(
-            root, 
-            text="Mark as Completed", 
-            width=48, 
-            command=self.mark_completed
-        )
-        self.mark_button.pack(pady=10)
-
-    def add_task(self):
-        task = self.task_entry.get()
-        if task != "":
-            self.tasks.append(task)
-            self.update_task_listbox()
-            self.task_entry.delete(0, tk.END)
+    def mark_completed(self, task_number):
+        if 0 <= task_number < len(self.tasks):
+            self.tasks[task_number]['completed'] = True
+            print(f"Marked task {task_number} as completed.")
         else:
-            messagebox.showwarning("Warning", "You must enter a task.")
+            print("Invalid task number.")
 
-    def remove_task(self):
-        task_index = self.task_listbox.curselection()
-        if task_index:
-            task_index = task_index[0]
-            del self.tasks[task_index]
-            self.update_task_listbox()
+    def remove_completed_tasks(self):
+        self.tasks = [task for task in self.tasks if not task['completed']]
+        print("Removed all completed tasks.")
+
+    def view_tasks(self):
+        if not self.tasks:
+            print("No tasks available.")
         else:
-            messagebox.showwarning("Warning", "You must select a task to remove.")
+            for i, task in enumerate(self.tasks):
+                status = "Completed" if task['completed'] else "Not Completed"
+                print(f"{i}: {task['task']} - {status}")
 
-    def mark_completed(self):
-        task_index = self.task_listbox.curselection()
-        if task_index:
-            task_index = task_index[0]
-            task = self.tasks[task_index]
-            self.tasks[task_index] = f"{task} (completed)"
-            self.update_task_listbox()
+def main():
+    todo_list = ToDoList()
+
+    while True:
+        print("\nTo-Do List Application")
+        print("1. Add Task")
+        print("2. Mark Task as Completed")
+        print("3. Remove Completed Tasks")
+        print("4. View Tasks")
+        print("5. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            task = input("Enter the task: ")
+            todo_list.add_task(task)
+        elif choice == '2':
+            task_number = int(input("Enter the task number to mark as completed: "))
+            todo_list.mark_completed(task_number)
+        elif choice == '3':
+            todo_list.remove_completed_tasks()
+        elif choice == '4':
+            todo_list.view_tasks()
+        elif choice == '5':
+            print("Exiting the application.")
+            break
         else:
-            messagebox.showwarning("Warning", "You must select a task to mark as completed.")
-
-    def update_task_listbox(self):
-        self.task_listbox.delete(0, tk.END)
-        for task in self.tasks:
-            self.task_listbox.insert(tk.END, task)
-
+            print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = ToDoApp(root)
-    root.mainloop()
-
+    main()
